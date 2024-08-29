@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 using System.Text;
+using System.Text.RegularExpressions;
 using GithubReleaseManagement.Models;
 using Octokit;
 using Tomlyn;
@@ -26,6 +27,7 @@ namespace GithubReleaseManagement
             var config = Toml.ToModel<Config>(tomlText);
             var token = config.Token.Value;
             InitializeComponent();
+            ticketUrlPrefixTxtField.Text = config.TicketUrlPrefix;
             var github = new GitHubClient(new ProductHeaderValue("GitCommander"))
             {
                 Credentials = new Credentials(token)
@@ -36,6 +38,7 @@ namespace GithubReleaseManagement
                 var repo = repoTxtField.Text.ToString();
                 var prNumber = prNumberTxtField.Text.ToString();
                 var downMergeIgnored = checkBox.Checked;
+                var ticketUrlPrefix = ticketUrlPrefixTxtField.Text.ToString();
                 var releases = github.PullRequest.Commits(orgUser, repo, int.Parse(prNumber)).Result;
                 var commitList = releases.Select(x => x.Commit.Message);
 
@@ -54,7 +57,15 @@ namespace GithubReleaseManagement
                     }
                     else
                     {
-                        stringbuilder.AppendLine($"* {sanitizedCommit}");
+                        if(sanitizedCommit.Split("-").Length > 2)
+                        {
+                            var ticketNumber = sanitizedCommit.Split("-")[1];
+                            stringbuilder.AppendLine($"* {ticketUrlPrefix}{ticketNumber}");
+                        }
+                        else
+                        { 
+                            stringbuilder.AppendLine($"* {ticketUrlPrefix}{sanitizedCommit}");
+                        }
                     }
                 }
                 

@@ -33,10 +33,16 @@ namespace GithubReleaseManagement {
         
         private Terminal.Gui.CheckBox checkBox;
         
+        private Terminal.Gui.Label label5;
+        
+        private Terminal.Gui.TextField ticketUrlPrefixTxtField;
+        
         private Terminal.Gui.Button getRlbtn;
         
         private void InitializeComponent() {
             this.getRlbtn = new Terminal.Gui.Button();
+            this.ticketUrlPrefixTxtField = new Terminal.Gui.TextField();
+            this.label5 = new Terminal.Gui.Label();
             this.checkBox = new Terminal.Gui.CheckBox();
             this.label4 = new Terminal.Gui.Label();
             this.orgUserTxtField = new Terminal.Gui.TextField();
@@ -147,10 +153,29 @@ namespace GithubReleaseManagement {
             this.checkBox.TextAlignment = Terminal.Gui.TextAlignment.Left;
             this.checkBox.Checked = true;
             this.Add(this.checkBox);
+            this.label5.Width = 3;
+            this.label5.Height = 1;
+            this.label5.X = 1;
+            this.label5.Y = 17;
+            this.label5.Visible = true;
+            this.label5.Data = "label5";
+            this.label5.Text = "Ticket URL Prefix";
+            this.label5.TextAlignment = Terminal.Gui.TextAlignment.Left;
+            this.Add(this.label5);
+            this.ticketUrlPrefixTxtField.Width = 47;
+            this.ticketUrlPrefixTxtField.Height = 2;
+            this.ticketUrlPrefixTxtField.X = 1;
+            this.ticketUrlPrefixTxtField.Y = 19;
+            this.ticketUrlPrefixTxtField.Visible = true;
+            this.ticketUrlPrefixTxtField.Secret = false;
+            this.ticketUrlPrefixTxtField.Data = "ticketUrlPrefixTxtField";
+            this.ticketUrlPrefixTxtField.Text = "";
+            this.ticketUrlPrefixTxtField.TextAlignment = Terminal.Gui.TextAlignment.Left;
+            this.Add(this.ticketUrlPrefixTxtField);
             this.getRlbtn.Width = 25;
             this.getRlbtn.Height = 1;
-            this.getRlbtn.X = 1;
-            this.getRlbtn.Y = 17;
+            this.getRlbtn.X = 0;
+            this.getRlbtn.Y = 21;
             this.getRlbtn.Visible = true;
             this.getRlbtn.Data = "getRlbtn";
             this.getRlbtn.Text = "Generate Release List";
