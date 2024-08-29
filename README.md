@@ -8,3 +8,4 @@ If you want to include down merge PRs in the list, make sure to uncheck the box
 
 Then just generate the list, copy and paste it into a note pad and if you have any PR's without a ticket number, then you will need to go those PRs and figure out what it is.
 
+You will need to generate a github PAT token with readonly access to Pull Requests.
