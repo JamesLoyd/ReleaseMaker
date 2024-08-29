@@ -3,7 +3,7 @@
 public class Config
 {
     public Token Token { get; set; }
-    public string TicketUrlPrefix { get; set; }
+    public string TicketUrlPrefix { get; set; } = "";
 }
 
 public class Token
