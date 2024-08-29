@@ -7,6 +7,11 @@
 //  </auto-generated>
 // -----------------------------------------------------------------------------
 
+using System.Text;
+using GithubReleaseManagement.Models;
+using Octokit;
+using Tomlyn;
+
 namespace GithubReleaseManagement
 {
     using Terminal.Gui;
@@ -17,6 +22,31 @@ namespace GithubReleaseManagement
         public MyView()
         {
             InitializeComponent();
+            var tomlText = File.ReadAllText("Config.toml");
+            var config = Toml.ToModel<Config>(tomlText);
+            var token = config.Token.Value;
+            InitializeComponent();
+            var github = new GitHubClient(new ProductHeaderValue("GitCommander"))
+            {
+                Credentials = new Credentials(token)
+            };
+            getRlbtn.Clicked += () =>
+            {
+                var orgUser = orgUserTxtField.Text.ToString();
+                var repo = repoTxtField.Text.ToString();
+                var prNumber = prNumberTxtField.Text.ToString();
+                var isPr = checkBox.Checked;
+                var releases = github.PullRequest.Commits(orgUser, repo, int.Parse(prNumber)).Result;
+                var commitList = releases.Select(x => x.Commit.Message);
+
+                var stringbuilder = new StringBuilder();
+                foreach (var commit in commitList)
+                {
+                    stringbuilder.AppendLine($"* {commit}");
+                }
+                
+                releaseListTv.Text = stringbuilder.ToString();
+            };
         }
     }
 }
