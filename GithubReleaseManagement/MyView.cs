@@ -35,18 +35,36 @@ namespace GithubReleaseManagement
                 var orgUser = orgUserTxtField.Text.ToString();
                 var repo = repoTxtField.Text.ToString();
                 var prNumber = prNumberTxtField.Text.ToString();
-                var isPr = checkBox.Checked;
+                var downMergeIgnored = checkBox.Checked;
                 var releases = github.PullRequest.Commits(orgUser, repo, int.Parse(prNumber)).Result;
                 var commitList = releases.Select(x => x.Commit.Message);
 
                 var stringbuilder = new StringBuilder();
                 foreach (var commit in commitList)
                 {
-                    stringbuilder.AppendLine($"* {commit}");
+                    var sanitizedCommit = commit.Split('(')[0];
+                    if(downMergeIgnored && IsDownMergePR(sanitizedCommit))
+                    {
+                        continue;
+                    }
+
+                    if (!sanitizedCommit.ToUpper().Contains("VNEXT-") && !sanitizedCommit.ToUpper().Contains("VNEXT ") && !sanitizedCommit.ToUpper().Contains("VNEXT "))
+                    {
+                        stringbuilder.AppendLine($"* {commit} ---- [WARNING: TICKET NUMBER NOT FOUND]");
+                    }
+                    else
+                    {
+                        stringbuilder.AppendLine($"* {sanitizedCommit}");
+                    }
                 }
                 
                 releaseListTv.Text = stringbuilder.ToString();
             };
+        }
+        
+        private bool IsDownMergePR(string commit)
+        {
+            return commit.ToLower().Contains("qa -> dev") || commit.ToLower().Contains("downmerge") || commit.ToLower().Contains("merge down");
         }
     }
 }
